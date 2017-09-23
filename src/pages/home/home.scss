@@ -1,0 +1,7 @@
+page-home {
+    .event-list {
+        &.public {
+            border-left: 8px solid color($colors, 'secondary');
+        }
+    }
+}

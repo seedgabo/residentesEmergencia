@@ -1,0 +1,65 @@
+<ion-content padding>
+  <div text-center>
+    <img src="./assets/logo-completo.png" style="height:85px" *ngIf="!api.url">
+    <img [src]="api.url + 'img/logo.png'" style="height:85px" *ngIf="api.url">
+  </div>
+  <div *ngIf="!api.url">
+    <input class="code" type="text" [(ngModel)]="code" placeholder="CODIGO" (input)="verifyCode()">
+
+  </div>
+
+  <ion-list *ngIf="api.url">
+    <div *ngIf="!forgot">
+
+      <ion-item>
+        <ion-label floating>Email</ion-label>
+        <ion-input type="email" [(ngModel)]="api.username"> </ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label floating>Contraseña</ion-label>
+        <ion-input type="password" [(ngModel)]="api.password"></ion-input>
+      </ion-item>
+
+      <button style="margin-top:15px" full large ion-button color="secondary" icon-right (click)="login()">
+            Iniciar Sesion
+            <ion-icon name="log-in"></ion-icon>
+        </button>
+
+
+      <!-- <button style="margin-top:15px" full ion-button icon-left (click)="loginWithFacebook()">
+                <ion-icon name="logo-facebook"></ion-icon>
+                Iniciar sesion con Facebook
+            </button>
+
+
+            <button style="margin-top:15px" full ion-button color="danger" icon-left (click)="loginWithGoogle()">
+                <ion-icon name="logo-googleplus"></ion-icon>
+                Iniciar sesion con Google
+            </button> -->
+
+      <button full clear ion-button color="light" (click)="forgot=true">
+            Olvido su contraseña
+        </button>
+
+      <button full clear ion-button color="red" (click)="goBack()">
+            Volver
+        </button>
+    </div>
+    <div *ngIf="forgot">
+      <ion-item>
+        <ion-label floating>Email</ion-label>
+        <ion-input type="email" [(ngModel)]="api.username"> </ion-input>
+      </ion-item>
+      <button style="margin-top:15px" full large ion-button color="secondary" (click)="recover(api.username)">
+        Recuperar
+      </button>
+      <button ion-button clear full color="light" (click)="forgot=false">
+        Volver al login
+    </button>
+
+    </div>
+
+
+
+  </ion-list>
+</ion-content>

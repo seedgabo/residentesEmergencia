@@ -1,0 +1,56 @@
+<ion-header>
+
+    <ion-navbar color="primary">
+        <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+        <ion-title>{{'literals.invoices' | trans }}</ion-title>
+    </ion-navbar>
+
+</ion-header>
+
+
+<ion-content>
+    <ion-grid>
+        <ion-row>
+            <ion-col col-md-6 *ngFor="let invoice of api.invoices">
+                <ion-card class="invoice-card" [ngClass]="[invoice.status,invoice.type]">
+                    <ion-card-header text-center>
+                        <ion-card-title ion-text color="primary" text-primary>
+                            <small>
+                        {{ invoice.date | amDateFormat:'MMMM/YYYY'}}
+                      </small>
+                        </ion-card-title>
+                    </ion-card-header>
+                    <ion-card-content>
+                        <p item-right [color]="invoice.status == 'paid'?'success':'danger'" ion-text text-center>
+                            {{ invoice.total | currency:'USD':true:'1.2-2' }}
+                        </p>
+                        <ion-item>
+                            <b>{{'literals.status' | trans }}:</b>
+                            <span>
+                              {{'literals.'+invoice.status | trans}}
+                            </span>
+                        </ion-item>
+                        <ion-grid>
+                            <ion-row>
+                                <ion-col col-9>
+                                    <button ion-button icon-left color="primary" (click)="downloadinvoice(invoice)">
+                                    <ion-icon name="document"></ion-icon>
+                                    {{ 'literals.view_resource' | trans  }} {{'literals.invoice' | trans}}
+                                </button>
+                                </ion-col>
+                                <ion-col col-2>
+                                    <button ion-fab color="favorite" (click)="openMenu(invoice)">
+                                    <ion-icon name="logo-buffer"></ion-icon>
+                                </button>
+                                </ion-col>
+                            </ion-row>
+                        </ion-grid>
+                    </ion-card-content>
+                </ion-card>
+            </ion-col>
+        </ion-row>
+    </ion-grid>
+
+</ion-content>

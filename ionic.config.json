@@ -1,0 +1,8 @@
+{
+  "name": "residencias2",
+  "app_id": "3fbd53a2",
+  "type": "ionic-angular",
+  "integrations": {
+    "cordova": {}
+  }
+}

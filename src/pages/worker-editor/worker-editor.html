@@ -1,0 +1,53 @@
+<ion-header>
+    <ion-navbar color="secondary">
+        <ion-title>
+            <span *ngIf="!worker.id">
+        {{'crud.add' | trans }}
+      </span>
+            <span *ngIf="worker.id">
+         {{'crud.edit' | trans }}
+      </span> {{ 'literals.worker' | trans }}
+        </ion-title>
+    </ion-navbar>
+</ion-header>
+<ion-content padding>
+    <ion-list>
+        <ion-item>
+            <ion-icon small name="person" item-left></ion-icon>
+            <ion-label floating="">{{ 'literals.name' | trans }}</ion-label>
+            <ion-input [(ngModel)]="worker.name"></ion-input>
+        </ion-item>
+        <ion-item>
+            <ion-icon small name="folder" item-left></ion-icon>
+            <ion-label floating="">{{'literals.document' | trans }}</ion-label>
+            <ion-input [(ngModel)]="worker.document"></ion-input>
+        </ion-item>
+        <ion-item>
+            <ion-icon small name="briefcase" item-left></ion-icon>
+            <ion-label floating="">{{'literals.work' | trans }}</ion-label>
+            <ion-input [(ngModel)]="worker.work"></ion-input>
+        </ion-item>
+        <ion-item>
+            <ion-icon small name="call" item-left></ion-icon>
+            <ion-label floating="">{{'literals.phone_number' | trans }}</ion-label>
+            <ion-input type="number" [(ngModel)]="worker.phone_number"></ion-input>
+        </ion-item>
+        <ion-item>
+            <ion-icon small name="transgender" item-left></ion-icon>
+            <ion-label floating="">{{'literals.sex' | trans }}</ion-label>
+            <ion-select [(ngModel)]="worker.sex">
+                <ion-option value="male"> {{ 'literals.male' | trans}}</ion-option>
+                <ion-option value="female"> {{ 'literals.female' | trans}}</ion-option>
+            </ion-select>
+        </ion-item>
+    </ion-list>
+</ion-content>
+
+<ion-footer>
+    <ion-toolbar>
+        <button ion-button full [disabled]="!canSave()" color="secondary" icon-left (click)="save()">
+        <ion-icon class="fa fa-save" ></ion-icon>
+        {{'crud.save' | trans }}
+    </button>
+    </ion-toolbar>
+</ion-footer>

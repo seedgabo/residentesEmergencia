@@ -1,0 +1,30 @@
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>{{survey.title}}</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+  <ion-card>
+    <ion-card-header>
+      {{survey.question}}
+    </ion-card-header>
+    <ion-card-content>
+      <canvas id="surveyChart" style="height:400px;width:400px;"></canvas>
+
+    </ion-card-content>
+  </ion-card>
+  <p *ngIf="vote">
+    <b>{{'literals.my vote' | trans }}:</b>
+    <span> {{ survey['response_'+vote.response] }} </span>
+  </p>
+</ion-content>
+<ion-footer>
+  <button *ngIf="!vote" ion-button full color="secondary" large (click)="setVote()" icon-left>
+      <ion-icon name="thumbs-up"></ion-icon>
+    {{'literals.vote' | trans }}
+  </button>
+</ion-footer>

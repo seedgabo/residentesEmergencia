@@ -1,0 +1,86 @@
+<ion-header>
+  <ion-navbar color="primary">
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>Home</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content>
+  <div *ngIf="sliders && sliders.length > 0">
+    <ion-slides style="height:200px" pager paginationType="bullets" autoplay="3000" loop="true">
+      <ion-slide *ngFor="let slider of sliders">
+        <img [src]="slider.image.url" [alt]="slider.name" style="height:100%; width:100%">
+
+        <h2 style="position:absolute; top:20%; left:12%;" [style.color]="slider.color? slider.color : 'white'">{{slider.name}}</h2>
+        <p style="position:absolute; top:35%; left:12%;" [style.color]="slider.color? slider.color : 'white'">{{slider.text}}</p>
+
+      </ion-slide>
+    </ion-slides>
+  </div>
+
+  <ion-card *ngIf="api.residence">
+
+    <ion-card-header text-center color="primary">
+      {{ api.residence.name }}
+    </ion-card-header>
+    <ion-card-content>
+      <ion-list>
+        <button ion-item (click)="gotoInvoices()">
+          <ion-icon name="stats" item-left></ion-icon>
+          <b>{{ 'literals.status' | trans }}</b>
+          <span item-right>{{ 'literals.' + api.residence.status | trans }}</span>
+        </button>
+        <button ion-item *ngIf="api.residence.owner" (click)="gotoProfile()">
+          <ion-icon name="person" item-left></ion-icon>
+          <b>{{'literals.owner'  | trans }}</b>
+          <span item-right> {{ api.residence.owner.name }} </span>
+        </button>
+        <button ion-item (click)="gotoInvoices()">
+          <ion-icon name="cash" item-left></ion-icon>
+          <b>{{'literals.debt'  | trans }}</b>
+          <span item-right> {{ api.residence.debt | currency:'USD':true:'1.2-2' }} </span>
+        </button>
+      </ion-list>
+    </ion-card-content>
+  </ion-card>
+
+  <ion-card *ngIf="nextEvents && nextEvents.length >0">
+    <ion-list>
+      <ion-list-header text-center>
+        <span color="primary" ion-text>
+            {{'__.next events' | trans}}
+        </span>
+      </ion-list-header>
+      <ion-item (click)="gotoCalendar(event)" *ngFor="let event of nextEvents" class="event-list" [ngClass]="[event.type,event.privacity]">
+        <h3>{{event.title}}</h3>
+        <p>
+          {{event.start | amCalendar }} - {{event.end | amCalendar }}
+        </p>
+      </ion-item>
+    </ion-list>
+  </ion-card>
+  <ion-list *ngIf="news && news.length > 0">
+    <ion-item *ngFor="let new of news">
+      <ion-avatar *ngIf="new.image" item-left>
+        <img [src]="new.image.url" alt="">
+      </ion-avatar>
+      {{new.title}}
+      <p text-right>
+        <span *ngIf="new.user">
+                {{new.user.name}}
+                </span>
+        <br>
+        <small>
+                    {{new.created_at | amCalendar}}
+                </small>
+      </p>
+      <div [innerHTML]="new.text" text-justify></div>
+
+    </ion-item>
+    <button ion-button full clear (click)="gotoNews()">
+        {{'literals.view_resource' | trans }} {{'literals.more' | trans }}
+    </button>
+  </ion-list>
+</ion-content>

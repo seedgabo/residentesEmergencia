@@ -1,0 +1,34 @@
+<ion-header>
+
+  <ion-navbar color="primary">
+    <ion-title>{{zone.name}} | {{'literals.reservations' | trans }}</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+  <div text-center>
+    <ion-spinner *ngIf="loading"></ion-spinner>
+  </div>
+  <ion-list>
+    <button ion-item *ngFor="let interval of options" (click)="reservate(interval)">
+      <ion-icon item-left name="time" [color]="interval.available == 0 ? 'danger': 'secondary'"></ion-icon>
+      <h2>
+        {{ interval.time.format("hh:mm A") }}
+      </h2>
+      <div *ngIf="!interval.reserved" >
+        <p *ngIf="interval.time.limit_user === 0 " [color]="interval.available == 0 ? 'danger': 'secondary'" ion-text>
+          {{'literals.available' | trans }}: {{ interval.available }}
+        </p>
+        <p *ngIf="interval.time.limit_user !== 0">
+          Cupos Ilimitados
+        </p>
+      </div>
+      <div *ngIf="interval.reserved">
+          {{'__.you have a reservation' | trans }}
+      </div>
+      <ion-icon name="checkmark" item-right *ngIf="interval.reserved"></ion-icon>
+    </button>
+  </ion-list>
+</ion-content>

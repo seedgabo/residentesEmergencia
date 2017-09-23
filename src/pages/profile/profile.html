@@ -1,0 +1,167 @@
+<ion-header>
+  <ion-navbar color="primary">
+    <button ion-button menuToggle icon-only>
+        <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>
+      <ion-icon name="person"></ion-icon>
+      {{'literals.profile' | trans }}
+    </ion-title>
+  </ion-navbar>
+</ion-header>
+
+
+<ion-content>
+
+  <ion-card>
+    <ion-card-header text-center padding class="hero">
+      <input type="file" accept="image/*" style="display:none;" id="input-file" (change)="readFile($event)">
+      <img [src]="profile.image_url" style="margin:0 auto;border-radius:50%; width:80px; height:80px;" (click)="askFile()">
+    </ion-card-header>
+    <ion-list padding>
+      <ion-item>
+        <ion-label stacked>{{'literals.name' | trans}}</ion-label>
+        <ion-input [(ngModel)]="profile.name"></ion-input>
+        <ion-icon item-left small name="person"></ion-icon>
+      </ion-item>
+      <ion-item>
+        <ion-label stacked>{{'literals.email' | trans}}</ion-label>
+        <ion-input type="email" [(ngModel)]="profile.email"></ion-input>
+        <ion-icon item-left small name="mail"></ion-icon>
+      </ion-item>
+      <ion-item>
+        <ion-label stacked>{{'literals.document' | trans}}</ion-label>
+        <ion-input type="number" [(ngModel)]="profile.document"></ion-input>
+        <ion-icon item-left small name="ios-folder-outline"></ion-icon>
+      </ion-item>
+      <ion-item>
+        <ion-label stacked>{{'literals.phone_number' | trans}}</ion-label>
+        <ion-input type="number" [(ngModel)]="profile.phone_number"></ion-input>
+        <ion-icon item-left small name="call"></ion-icon>
+      </ion-item>
+      <ion-item>
+        <ion-label stacked>{{'literals.sex' | trans}}</ion-label>
+        <ion-select [(ngModel)]="profile.sex">
+          <ion-option value="male">{{'literals.male' | trans}}</ion-option>
+          <ion-option value="female">{{'literals.female' | trans}}</ion-option>
+        </ion-select>
+        <ion-icon item-left small name="transgender"></ion-icon>
+      </ion-item>
+      <ion-item>
+        <ion-label stacked>{{'literals.birthday' | trans}}</ion-label>
+        <ion-datetime [(ngModel)]="profile.birthday" [monthNames]="months" [monthShortNames]="monthShortNames"></ion-datetime>
+        <ion-icon item-left small name="calendar"></ion-icon>
+      </ion-item>
+      <ion-item *ngIf="api.user.id !== api.residence.owner_id">
+        <ion-label stacked>{{'literals.relationship' | trans}}</ion-label>
+        <ion-select [(ngModel)]="profile.relationship">
+          <ion-option value="son">{{'literals.son' | trans}}</ion-option>
+          <ion-option value="spouse">{{'literals.spouse' | trans}}</ion-option>
+          <ion-option value="parent">{{'literals.parent' | trans}}</ion-option>
+          <ion-option value="brother">{{'literals.brother' | trans}}</ion-option>
+          <ion-option value="other">{{'literals.other' | trans}}</ion-option>
+        </ion-select>
+        <ion-icon item-left small name="transgender"></ion-icon>
+      </ion-item>
+      <button ion-button full color="primary" icon-left *ngIf="canSaveUser()" (click)="updateProfile()">
+          <ion-icon class="fa fa-save"></ion-icon>
+          {{'crud.save' | trans}}
+      </button>
+
+    </ion-list>
+
+  </ion-card>
+
+  <ion-card>
+    <ion-card-content>
+      <ion-list>
+        <ion-list-header class="header-primary">
+          {{residence.name}}
+          <button item-right color="light" icon-only ion-button clear (click)="editable=!editable"> 
+              <ion-icon name="create"></ion-icon>
+          </button>
+        </ion-list-header>
+        <div *ngIf="!editable">
+          <ion-item>
+            <b>{{ 'literals.status' | trans }}</b>
+            <span item-right>{{ 'literals.'+residence.status | trans  }}</span>
+          </ion-item>
+          <ion-item text-center>
+            <b>{{ residence.total/(residence.total-residence.debt)*100 }}%</b>
+            <br>
+            <round-progress style="margin: 0 auto;" [radius]="60" [current]="residence.total - residence.debt" [max]="residence.total"></round-progress>
+          </ion-item>
+          <ion-item *ngIf="residence.owner">
+            <b>{{ 'literals.owner' | trans }}</b>
+            <span item-right>{{ residence.owner.name  }}</span>
+          </ion-item>
+          <ion-item>
+            <b>{{ 'literals.number_of_people' | trans }}</b>
+            <span item-right>{{ residence.number_of_people }}</span>
+          </ion-item>
+          <ion-item>
+            <b>{{ 'literals.alicuota' | trans }}</b>
+            <span item-right>{{ residence.alicuota }} % </span>
+          </ion-item>
+          <ion-item>
+            <b>{{ 'literals.users' | trans }}</b>
+          </ion-item>
+          <ion-item text-right>
+            <span *ngFor="let user of residence.users">
+            {{ user.name }}
+            <br>
+          </span>
+          </ion-item>
+        </div>
+        <div *ngIf="editable">
+          <ion-item>
+            <ion-icon small item-left name="home"></ion-icon>
+            <ion-label floating>{{'literals.name' | trans }}</ion-label>
+            <ion-input [(ngModel)]="residence.name"></ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-icon small item-left name="people"></ion-icon>
+            <ion-label floating>{{'literals.number_of_people' | trans }}</ion-label>
+            <ion-input [(ngModel)]="residence.number_of_people"></ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-icon small item-left name="person"></ion-icon>
+            <ion-label floating>{{'literals.owner' | trans }}</ion-label>
+            <ion-select [(ngModel)]="residence.owner_id">
+              <ion-option [value]="user.id" *ngFor="let user of residence.users">{{user.name}}</ion-option>
+            </ion-select>
+          </ion-item>
+          <button ion-button full color="primary" icon-left *ngIf="canSaveResidence()" (click)="updateResidence()">
+            <ion-icon class="fa fa-save"></ion-icon>
+            {{'crud.save' | trans}}
+          </button>
+        </div>
+      </ion-list>
+    </ion-card-content>
+  </ion-card>
+
+  <ion-card>
+    <ion-card-header>{{'literals.change' | trans }} {{'literals.password'| trans}}</ion-card-header>
+    <ion-card-content>
+      <ion-list>
+        <ion-item>
+          <ion-icon small name="lock" item-left [color]="password.length ==0 ? 'dark' :password.length>5? 'secondary' :'danger'"></ion-icon>
+          <ion-label floating>{{'literals.password' | trans }}</ion-label>
+          <ion-input type="password" [(ngModel)]="password"></ion-input>
+
+        </ion-item>
+
+        <ion-item>
+          <ion-icon small name="unlock" item-left [color]="password_confirmation.length ==0 ? 'dark' :password==password_confirmation? 'secondary' :'danger'"></ion-icon>
+          <ion-label floating>{{'literals.password_confirmation' | trans }} </ion-label>
+          <ion-input type="password" [(ngModel)]="password_confirmation"></ion-input>
+        </ion-item>
+        <button full (click)="updatePassword()" color="favorite" ion-button [disabled]="!(password.length>5 && password == password_confirmation)">
+          <ion-icon class="fa fa-save"></ion-icon> 
+            {{ 'crud.save' | trans}}
+        </button>
+
+      </ion-list>
+    </ion-card-content>
+  </ion-card>
+</ion-content>

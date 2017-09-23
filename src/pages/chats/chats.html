@@ -1,0 +1,112 @@
+<ion-menu id="chatMenu" type="overlay" side="right" [content]="chatDiv">
+    <ion-content>
+        <ion-list>
+            <ion-list-header text-capitalize>
+                <ion-icon small color="primary" name="chatbubbles"></ion-icon>
+                {{'literals.chats' | trans }}
+            </ion-list-header>
+            <button ion-item *ngFor="let chat of api.chats" (click)="selectChat(chat)" menuClose="right" detail-none>
+              {{chat.title}}
+              <ion-badge item-end *ngIf="chat.unread" >{{ chat.unread }}</ion-badge>
+            </button>
+        </ion-list>
+        <ion-fab bottom right>
+            <button ion-fab>
+              <ion-icon name="add"></ion-icon>
+          </button>
+        </ion-fab>
+    </ion-content>
+</ion-menu>
+
+<div style="height:100%" #chatDiv>
+
+    <ion-header>
+
+        <ion-navbar color="favorite">
+            <button ion-button menuToggle icon-only>
+                <ion-icon name="menu"></ion-icon>
+            </button>
+            <ion-title text-capitalize>{{ 'literals.chats' | trans }}</ion-title>
+            <ion-buttons end>
+                <button ion-button icon-only (click)="scrolltoBottom()">
+                  <ion-icon name="arrow-down"></ion-icon>
+                </button>
+            </ion-buttons>
+            <ion-buttons right>
+                <button ion-button icon-only menuToggle="right">
+                  <ion-icon name="chatboxes"></ion-icon>
+                </button>
+            </ion-buttons>
+        </ion-navbar>
+    </ion-header>
+
+
+    <ion-content id="chat">
+        <ion-list inset #chatBody *ngIf="chat" class="chat-body">
+            <h4>
+                <b>{{chat.title}}</b>
+            </h4>
+            <div text-center *ngIf="loading">
+                <ion-spinner color="primary"></ion-spinner>
+            </div>
+            <div class="chat-msg" *ngFor="let msg of messages">
+                <ion-grid>
+                    <ion-row *ngIf="msg.user.id !== api.user.id">
+                        <ion-col col-2>
+                            <img [src]="msg.user.image_url" class="chat-avatar">
+                        </ion-col>
+                        <ion-col col-10>
+                            <div class="chat-text">{{msg.body}}
+                                <p class="chat-user" *ngIf="msg.user" text-right>
+                                    <b>
+                                    {{msg.user.name}}
+                                    <span *ngIf="msg.user.residence" > - {{msg.user.residence.name}}</span>
+                                    <br>
+                                    <small>{{msg.created_at | amTimeAgo }}</small>
+                                  </b>
+                                </p>
+                            </div>
+                        </ion-col>
+                    </ion-row>
+                    <ion-row *ngIf="msg.user.id === api.user.id">
+                        <ion-col col-10>
+                            <div class="chat-text me">
+                                {{msg.body}}
+                                <p class="chat-user" *ngIf="msg.user" text-right>
+                                    <b>
+                                    {{msg.user.name}}
+                                    <span *ngIf="msg.user.residence" > - {{msg.user.residence.name}}</span>
+                                    <br>
+                                    <small>{{msg.created_at | amTimeAgo }}</small>
+                                  </b>
+                                </p>
+                            </div>
+                        </ion-col>
+                        <ion-col col-2>
+                            <img [src]="msg.user.image_url" class="chat-avatar me">
+                        </ion-col>
+                    </ion-row>
+
+                </ion-grid>
+            </div>
+        </ion-list>
+    </ion-content>
+
+
+    <ion-footer>
+        <ion-grid>
+            <ion-row>
+                <ion-col col-10>
+                    <input type="text" class="text-input" #chatInput [(ngModel)]="message" [placeholder]="api.trans('__.type here')">
+                </ion-col>
+                <ion-col col-2>
+                    <button [disabled]="sending" clear icon-only ion-button (click)="send()" color="primary">
+                    <ion-icon name="send" *ngIf="!sending" ></ion-icon>
+                    <ion-spinner *ngIf="sending" ></ion-spinner>
+                  </button>
+                </ion-col>
+            </ion-row>
+        </ion-grid>
+    </ion-footer>
+
+</div>

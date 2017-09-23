@@ -1,0 +1,52 @@
+<ion-split-pane>
+    <ion-menu [content]="content" [enabled]="api.user">
+        <ion-header>
+            <div class="user-info" padding>
+                <ion-fab bottom left>
+                    <button ion-fab color="danger" class="pulse" (click)="!disable_panic && panic()" *ngIf="siteHas('panic')">
+                        <ion-icon name="help-buoy"></ion-icon>
+                    </button>
+                </ion-fab>
+
+                <img *ngIf="api.user" [src]="api.user.image_url" class="avatar-user">
+                <h5 text-center *ngIf="api.user">{{api.user.name}}</h5>
+                <ion-fab bottom right style="bottom:0px;">
+                    <button (click)="see_residences=!see_residences" color="light" ion-button icon-right *ngIf="api.residence" clear>{{api.residence.name}}
+                      <ion-icon [name]="see_residences? 'arrow-dropdown' :'arrow-dropleft'"></ion-icon>
+                    </button>
+                </ion-fab>
+            </div>
+        </ion-header>
+        <ion-content>
+            <ion-list *ngIf="!see_residences">
+                <ng-container *ngFor="let p of pages">
+                    <button menuClose ion-item (click)="openPage(p)" *ngIf="siteHas(p.module)">
+                      <ion-icon [name]="p.icon" item-left color="primary"></ion-icon>
+                          {{ api.trans('literals.' + p.title)}}
+                      <ion-badge item-right *ngIf="p.beta" color="secondary">BETA</ion-badge>
+                    </button>
+                </ng-container>
+                <ion-item-divider>
+                    <ion-icon name="settings" item-left></ion-icon>
+                    {{ 'literals.settings' | trans }}
+                </ion-item-divider>
+                <button menuClose ion-item (click)="logout()">
+                  <ion-icon item-left name="log-out"></ion-icon>
+                  Cerrar Sesión
+                </button>
+            </ion-list>
+            <ion-list *ngIf="see_residences">
+                <ion-list-header>
+                    {{api.trans('literals.my')}} {{api.trans('literals.residences')}}
+                </ion-list-header>
+                <button [disabled]="res.id == api.residence.id" menuClose ion-item (click)="changeResidence(res)" *ngFor="let res of api.user.residences" icon-left>
+                  <ion-icon name="home" [color]="res.status == 'solvent'? 'secondary':'danger'"></ion-icon>
+                  {{res.name}}
+                </button>
+            </ion-list>
+        </ion-content>
+    </ion-menu>
+
+    <!-- Disable swipe-to-go-back because it's poor UX to combine STGB with side menus -->
+    <ion-nav [root]="rootPage" main #content swipeBackEnabled="false"></ion-nav>
+</ion-split-pane>

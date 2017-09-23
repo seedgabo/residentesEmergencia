@@ -1,0 +1,78 @@
+{
+  "project_info": {
+    "project_number": "425679220353",
+    "firebase_url": "https://residencias-online.firebaseio.com",
+    "project_id": "residencias-online",
+    "storage_bucket": "residencias-online.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:425679220353:android:21c08d90b64d5394",
+        "android_client_info": {
+          "package_name": "com.ionicframework.residenciasonline220562"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "425679220353-u39prig4hkrjg592lnppmnbfj6lvi4qk.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC-khpEYMVX0GNBDz-utvaoH0m3i4xcQig"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:425679220353:android:326fc22ad9f3f53d",
+        "android_client_info": {
+          "package_name": "com.seedgabo.residencias"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "425679220353-u39prig4hkrjg592lnppmnbfj6lvi4qk.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC-khpEYMVX0GNBDz-utvaoH0m3i4xcQig"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "425679220353-u39prig4hkrjg592lnppmnbfj6lvi4qk.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

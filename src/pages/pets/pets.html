@@ -1,0 +1,33 @@
+<ion-header>
+  <ion-navbar color="primary">
+    <button ion-button menuToggle icon-only><ion-icon name="menu"></ion-icon></button>
+    <ion-title>{{'literals.pets' | trans }}</ion-title>
+  </ion-navbar>
+</ion-header>
+<ion-content>
+  <ion-searchbar [(ngModel)]="query" debounce="500" (ionInput)="filter()"></ion-searchbar>
+  <ion-list>
+    <input type="file" accept="image/*" style="display:none;" id="input-file-pet" (change)="readFile($event)">
+    <button ion-item *ngFor="let pet of pets" (click)="actions(pet)">
+      <ion-avatar item-left (click)="askFile(pet);$event.stopPropagation()">
+        <img *ngIf="pet.image_url"  [src]="pet.image_url" [alt]="pet.name">
+        <ion-icon name="camera"  *ngIf="!pet.image_url"></ion-icon>
+      </ion-avatar>
+        <h2>
+          {{pet.name}}
+        </h2>
+        <p>
+            {{pet.specie }} - {{pet.breed}}
+        </p>
+        <small>
+            {{ pet.document }}
+        </small>
+      
+    </button>
+  </ion-list>
+  <ion-fab bottom right>
+    <button ion-fab (click)="addpet()">
+      <ion-icon name="add"></ion-icon>
+    </button>
+  </ion-fab>
+</ion-content>

@@ -1,0 +1,21 @@
+<ion-header>
+
+  <ion-navbar color="secondary">
+    <ion-title>{{ 'literals.invoice' | trans }} #{{invoice.number}}</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content>
+  <ion-list inset>
+    <ion-list-header>
+      <h4 color="primary" ion-text>{{'literals.items' | trans }}</h4>
+    </ion-list-header>
+    <ion-item *ngFor="let item of invoice.items">
+      <b>{{item.concept}}</b>
+      <small>({{item.quantity}})</small>
+      <span item-right>{{ item.amount | currency:'USD':true:'1.2-2' }}</span>
+    </ion-item>
+  </ion-list>
+</ion-content>

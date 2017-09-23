@@ -1,0 +1,10 @@
+page-profile {
+  .hero {
+    background-image: url(https://ak2.picdn.net/shutterstock/videos/23151772/thumb/1.jpg);
+    background-size: cover;
+  }
+  .header-primary {
+    background: color($colors, 'primary');
+    color: white;
+  }
+}

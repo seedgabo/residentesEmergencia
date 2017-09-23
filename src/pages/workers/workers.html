@@ -1,0 +1,24 @@
+<ion-header>
+    <ion-navbar color="primary">
+        <button ion-button menuToggle icon-only><ion-icon name="menu"></ion-icon></button>
+        <ion-title>{{'literals.workers' | trans }}</ion-title>
+    </ion-navbar>
+</ion-header>
+<ion-content>
+    <ion-searchbar [(ngModel)]="query" debounce="500" (ionInput)="filter()"></ion-searchbar>
+    <ion-list>
+        <input type="file" accept="image/*" style="display:none;" id="input-file-worker" (change)="readFile($event)">
+        <button ion-item *ngFor="let worker of workers" (click)="actions(worker)">
+      <ion-avatar item-left (click)="askFile(worker);$event.stopPropagation()">
+        <img *ngIf="worker.image_url"  [src]="worker.image_url" [alt]="worker.name">
+        <ion-icon name="camera"  *ngIf="!worker.image_url"></ion-icon>
+      </ion-avatar>
+      {{worker.name}}
+    </button>
+    </ion-list>
+    <ion-fab bottom right>
+        <button ion-fab (click)="addworker()">
+      <ion-icon name="add"></ion-icon>
+    </button>
+    </ion-fab>
+</ion-content>

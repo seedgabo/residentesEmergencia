@@ -1,0 +1,42 @@
+<ion-header>
+    <ion-navbar color="secondary">
+        <ion-title>{{'crud.add' | trans}} {{'literals.post' | trans }}</ion-title>
+    </ion-navbar>
+</ion-header>
+<ion-content>
+    <ion-list inset>
+        <ion-item>
+            <ion-label floating>{{'literals.title' | trans}}</ion-label>
+            <ion-input type="text" [(ngModel)]="post.title"></ion-input>
+        </ion-item>
+        <ion-item>
+            <ion-label floating>{{'literals.text' | trans }}</ion-label>
+            <ion-textarea [(ngModel)]="post.text"></ion-textarea>
+        </ion-item>
+        <input id="input-file" type="file" accept="image/*" name="file" style="display:none" (change)="readFile($event)">
+        <div text-center>
+            <img [src]="post_image" *ngIf="!!post_image" alt="" style="max-width:50%; max-height:150px">
+        </div>
+        <button ion-button icon-only block color="light" large (click)="askFile()">
+        <ion-icon name="camera"></ion-icon>
+    </button>
+    </ion-list>
+    <div text-center>
+        <ion-chip *ngFor="let tag of selected_tags; let i = index">
+            <ion-label>{{tag.name}}</ion-label>
+            <button ion-button clear (click)="deleteTag(tag,i)">
+              <ion-icon name="close"></ion-icon>
+          </button>
+        </ion-chip>
+        <ion-auto-complete #searchbar [showResultsFirst]="true" (itemSelected)="addTag($event)" [dataProvider]="provider" [options]="{ placeholder : 'tags' }"></ion-auto-complete>
+    </div>
+</ion-content>
+<ion-footer>
+    <div text-center *ngIf="uploading">
+        <ion-spinner large></ion-spinner>
+    </div>
+
+    <button color="secondary" ion-button full (click)="createPost()" [disabled]="post.title.length < 3 || post.text.length < 5" *ngIf="!uploading">
+      {{'crud.save' | trans}}
+    </button>
+</ion-footer>

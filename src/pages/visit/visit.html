@@ -1,0 +1,51 @@
+<ion-header>
+  <ion-navbar color="favorite">
+    <ion-title>{{ 'literals.visit' | trans }}</ion-title>
+  </ion-navbar>
+
+</ion-header>
+<ion-content>
+  <ion-list>
+    <div *ngIf="visit.visitors && visit.visitors.length > 0">
+      <ion-list-header>
+        {{ 'literals.visitors' | trans }}
+      </ion-list-header>
+      <ion-item text-justify *ngFor="let visitor of visit.visitors">
+        <ion-label>
+          <span> {{visitor.name}}</span>
+        </ion-label>
+        <ion-select *ngIf="visitor.pivot" [(ngModel)]="visitor.pivot.status">
+          <ion-option value="approved">{{'literals.approved' | trans }}</ion-option>
+          <ion-option value="rejected">{{'literals.rejected' | trans }}</ion-option>
+          <ion-option disabled value="waiting for confirmation">{{'literals.waiting for confirmation' | trans }}</ion-option>
+        </ion-select>
+      </ion-item>
+    </div>
+    <div *ngIf="(!visit.visitors || visit.visitors.length === 0) && visit.visitor">
+      <ion-item>
+        <b>{{'literals.visitor' | trans }}</b>
+        <ion-label>
+          <span item-right>{{visit.visitor.name}}</span>
+        </ion-label>
+      </ion-item>
+    </div>
+    <ion-item>
+      <ion-label inline> {{'literals.status' | trans }}</ion-label>
+      <ion-select [(ngModel)]="visit.status" (ionChange)="updateVisit()">
+        <ion-option value="approved">{{'literals.approved' | trans }}</ion-option>
+        <ion-option value="rejected">{{'literals.rejected' | trans }}</ion-option>
+        <ion-option disabled value="waiting for confirmation">{{'literals.waiting for confirmation' | trans }}</ion-option>
+      </ion-select>
+    </ion-item>
+    <ion-item>
+      <b>{{'literals.arrive' | trans }}</b>
+      <span item-right>{{ visit.created_at | amCalendar }}</span>
+    </ion-item>
+  </ion-list>
+</ion-content>
+<ion-footer>
+  <button full icon-left ion-button color="secondary" (click)="updateVisit(true)">
+    <ion-icon class="fa fa-save"></ion-icon>
+    {{ 'crud.save' | trans }}
+  </button>
+</ion-footer>

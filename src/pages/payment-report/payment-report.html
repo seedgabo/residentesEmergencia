@@ -1,0 +1,41 @@
+<ion-content>
+  <ion-toolbar>
+    <ion-navbar color="primary">
+      <ion-title>{{ 'literals.invoice' | trans }}</ion-title>
+      <ion-buttons end>
+        <button ion-button icon-only (click)="dismiss()">
+            <ion-icon name="close"></ion-icon>
+          </button>
+      </ion-buttons>
+    </ion-navbar>
+  </ion-toolbar>
+  <ion-list>
+    <ion-item>
+      <ion-label inline>{{'literals.amount' | trans }}</ion-label>
+      <ion-input [(ngModel)]="amount"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label inline>{{'literals.transaction' | trans }}</ion-label>
+      <ion-select [(ngModel)]="transaction">
+        <ion-option value="check">{{'literals.check' | trans }} </ion-option>
+        <ion-option value="deposit">{{'literals.deposit' | trans }} </ion-option>
+        <ion-option value="cash">{{'literals.cash' | trans }} </ion-option>
+        <ion-option value="debit card">{{'literals.debit card' | trans }} </ion-option>
+        <ion-option value="credit card">{{'literals.credit card' | trans }} </ion-option>
+        <ion-option value="other">{{'literals.other' | trans }} </ion-option>
+      </ion-select>
+    </ion-item>
+  </ion-list>
+  <ion-toolbar color="light">
+    <ion-grid>
+      <ion-row>
+        <ion-col>
+          <button ion-button full color="primary" (click)="pay()">{{'__.report payment' | trans}}</button>
+        </ion-col>
+        <ion-col>
+          <button ion-button full color="light" (click)="dismiss()">{{'crud.cancel' | trans }}</button>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+  </ion-toolbar>
+</ion-content>

@@ -35,6 +35,7 @@ import { RoundProgressModule } from 'angular-svg-round-progressbar';
 import { MyApp } from './app.component';
 import { HomePage } from '../pages/home/home';
 import { Login } from "../pages/login/login";
+import { ProfilePage } from "../pages/profile/profile";
 
 
 @NgModule({
@@ -42,6 +43,7 @@ import { Login } from "../pages/login/login";
     MyApp,
     HomePage,
     Login,
+    ProfilePage,
     TransPipe,
   ],
   imports: [
@@ -59,6 +61,7 @@ import { Login } from "../pages/login/login";
     MyApp,
     HomePage,
     Login,
+    ProfilePage
   ],
   providers: [
     StatusBar, SplashScreen, Camera, Facebook, GooglePlus, AppMinimize, BackgroundMode, CodePush, OneSignal, Device,

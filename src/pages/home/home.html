@@ -1,34 +1,34 @@
 <ion-header>
-    <ion-navbar color="primary">
-        <!-- <button ion-button menuToggle>
+  <ion-navbar color="primary">
+    <!-- <button ion-button menuToggle>
       <ion-icon name="menu"></ion-icon> -->
-        <!-- </button> -->
-        <ion-title>Home</ion-title>
-    </ion-navbar>
+    <!-- </button> -->
+    <ion-title>Home</ion-title>
+  </ion-navbar>
 </ion-header>
 
 <ion-content>
-    <button ion-button color="danger" class="panic-button-giant" (click)="panic()">
+  <button ion-button color="danger" class="panic-button-giant" (click)="panic()">
     {{ api.trans('literals.panic') }}
    </button>
-    <ion-card *ngIf="api.residence">
+  <ion-card *ngIf="api.residence">
 
-        <ion-card-header text-center color="primary">
-            {{ api.residence.name }}
-        </ion-card-header>
-        <ion-card-content>
-            <ion-list>
-                <button ion-item>
+    <ion-card-header text-center color="primary">
+      {{ api.residence.name }}
+    </ion-card-header>
+    <ion-card-content>
+      <ion-list>
+        <button ion-item>
           <ion-icon name="stats" item-left></ion-icon>
           <b>{{ 'literals.status' | trans }}</b>
           <span item-right>{{ 'literals.' + api.residence.status | trans }}</span>
         </button>
-                <button ion-item *ngIf="api.residence.owner">
+        <button ion-item *ngIf="api.residence.owner">
           <ion-icon name="person" item-left></ion-icon>
           <b>{{'literals.owner'  | trans }}</b>
           <span item-right> {{ api.residence.owner.name }} </span>
         </button>
-            </ion-list>
-        </ion-card-content>
-    </ion-card>
+      </ion-list>
+    </ion-card-content>
+  </ion-card>
 </ion-content>

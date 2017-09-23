@@ -1,6 +1,3 @@
-import { ReservationsPage } from './../pages/reservations/reservations';
-import { TablesPage } from './../pages/tables/tables';
-import { SurveyPage } from './../pages/survey/survey';
 import { Component, ViewChild } from '@angular/core';
 import { Nav, Platform, Events } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
@@ -10,19 +7,9 @@ import { BackgroundMode } from '@ionic-native/background-mode';
 import { Deeplinks } from "@ionic-native/deeplinks";
 
 import { HomePage } from '../pages/home/home';
-import { ParkingsPage } from '../pages/parkings/parkings';
 import { Login } from '../pages/login/login';
-import { Residences } from "../pages/residences/residences";
 import { Api } from "../providers/api";
 import { AppMinimize } from "@ionic-native/app-minimize";
-import { VisitTabsPage } from "../pages/visit-tabs/visit-tabs";
-import { EventsPage } from "../pages/events/events";
-import { InvoicesPage } from "../pages/invoices/invoices";
-import { DocumentsPage } from "../pages/documents/documents";
-import { PostsPage } from "../pages/posts/posts";
-import { SurveysPage } from "../pages/surveys/surveys";
-import { ProfilePage } from "../pages/profile/profile";
-import { ChatsPage } from '../pages/chats/chats';
 
 
 @Component({
@@ -34,7 +21,6 @@ export class MyApp {
   rootPage: any;
   see_residences = false
   pages: Array<any>;
-  VisitTabsPage = VisitTabsPage;
   disabled_panic = false;
   constructor(public platform: Platform, public statusBar: StatusBar, public splashScreen: SplashScreen, public codepush: CodePush, public backgroundmode: BackgroundMode, public api: Api, public minimize: AppMinimize, public deeplinks: Deeplinks, public events: Events) {
     this.platform.ready().then(() => {
@@ -43,7 +29,6 @@ export class MyApp {
         console.log(this.api.user);
         if (this.api.user) {
           this.rootPage = HomePage;
-          // this.rootPage = ReservationsPage;
           this.api.getAllData();
           this.api.getLang();
           this.registerDeepLinks();
@@ -60,23 +45,6 @@ export class MyApp {
       })
     });
 
-    // used for an example of ngFor and navigation
-    this.pages = [
-      { title: "home", component: HomePage, icon: 'home' },
-      { title: "profile", component: ProfilePage, icon: 'person' },
-      { title: "posts", component: PostsPage, icon: 'paper' },
-      { title: "visitors", component: VisitTabsPage, icon: 'contacts' },
-      { title: "lists", component: TablesPage, icon: 'list' },
-      { title: "surveys", component: SurveysPage, icon: 'pie' },
-      { title: "events", component: EventsPage, icon: 'calendar' },
-      { title: "invoices", component: InvoicesPage, icon: 'card', modules: 'finanze' },
-      { title: "dynamic_documents", component: DocumentsPage, icon: 'document' },
-      { title: "reservations", component: ReservationsPage, icon: 'tennisball', modules: 'reservations', beta: true },
-      { title: "parkings", component: ParkingsPage, icon: 'car', modules: 'parkings' },
-      { title: "residences", component: Residences, icon: 'albums' },
-      { title: "chats", component: ChatsPage, icon: 'chatbubbles', modules: 'chat' },
-    ];
-
   }
 
   initializeApp() {
@@ -92,7 +60,7 @@ export class MyApp {
 
       this.backgroundmode.enable();
       this.backgroundmode.setDefaults(
-        { icon: 'icon', text: "", title: "Residentes Online", color: "#42f459", bigText: true }
+        { icon: 'icon', text: "", title: "Residentes Online", color: "#42f459", bigText: true, silent: true }
       );
       this.backgroundmode.excludeFromTaskList();
       // this.backgroundmode.overrideBackButton();
@@ -116,32 +84,6 @@ export class MyApp {
   }
 
   registerDeepLinks() {
-    this.deeplinks.route({
-      '/visit/:visitId': VisitTabsPage,
-      '/visitor/:visitorId': VisitTabsPage,
-      '/surveys': SurveyPage,
-    }).subscribe((match) => {
-      console.log('Successfully routed', match);
-      var args = {};
-      for (var key in match.$args) {
-        args[key] = match.$args[key];
-      }
-      if (match.$link.url.indexOf("residenciasOnline://app/visit") > -1) {
-        this.nav.setRoot(VisitTabsPage, args);
-        setTimeout(() => {
-          this.api.newVisit(args);
-        }, 2000)
-      }
-      if (match.$link.url.indexOf("residenciasOnline://app/visitor") > -1) {
-        this.nav.setRoot(VisitTabsPage, args);
-      }
-      if (match.$link.url.indexOf("residenciasOnline://app/surveys") > -1) {
-        this.nav.setRoot(SurveyPage, args);
-      }
-    }, (nomatch) => {
-      this.nav.setRoot(HomePage);
-      console.warn('Unmatched Route', nomatch);
-    });
   }
 
   logout() {

@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavController } from 'ionic-angular';
+import { NavController, Events } from 'ionic-angular';
 import { Api } from "../../providers/api";
 // import { Camera, CameraOptions } from '@ionic-native/camera';
 
@@ -15,7 +15,7 @@ export class HomePage {
   text = "";
   nextEvents = [];
   news = [];
-  constructor(public navCtrl: NavController, public api: Api) {
+  constructor(public navCtrl: NavController, public events: Events, public api: Api) {
   }
 
   ionViewDidLoad() {
@@ -23,6 +23,9 @@ export class HomePage {
   }
   panic() {
     this.api.panic();
+  }
+  logout() {
+    this.events.publish('logout', {});
   }
 }
 

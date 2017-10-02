@@ -41,7 +41,7 @@
             Olvido su contraseña
         </button>
 
-      <button full clear ion-button color="red" (click)="goBack()">
+      <button *ngIf="!predefined" full clear ion-button color="red" (click)="goBack()">
             Volver
         </button>
     </div>

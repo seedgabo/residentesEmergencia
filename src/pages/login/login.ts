@@ -4,7 +4,7 @@ import { HomePage } from "../home/home";
 import { Api } from "../../providers/api";
 import { Facebook } from '@ionic-native/facebook';
 import { GooglePlus } from '@ionic-native/google-plus';
-
+declare var window: any;
 @Component({
   selector: 'page-login',
   templateUrl: 'login.html',
@@ -14,7 +14,12 @@ export class Login {
   ready = false;
   servers = {};
   code = "";
+  predefined = false;
   constructor(public facebook: Facebook, public google: GooglePlus, public navCtrl: NavController, public navParams: NavParams, public api: Api, public alertCtrl: AlertController, public loadingCtrl: LoadingController, public events: Events) {
+    this.api.ready.then(() => {
+      if (window.url)
+        this.predefined = true;
+    });
   }
 
   ionViewDidLoad() {
@@ -170,6 +175,7 @@ export class Login {
         console.log(this.servers);
       }, (err) => { console.error(err) });
   }
+
   goTo() {
     this.events.publish('login', {});
     this.navCtrl.setRoot(HomePage);

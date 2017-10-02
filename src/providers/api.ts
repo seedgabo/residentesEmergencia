@@ -56,6 +56,8 @@ export class Api {
       storage.get('residence').then(residence => { this.residence = residence; });
       storage.get('url').then(url => {
         this.url = url
+        if (!url && window.url)
+          this.url = window.url;
         storage.get('user').then(user => {
           this.user = user
           this.resolve(user);

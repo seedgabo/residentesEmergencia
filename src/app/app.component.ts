@@ -11,7 +11,7 @@ import { Login } from '../pages/login/login';
 import { Api } from "../providers/api";
 import { AppMinimize } from "@ionic-native/app-minimize";
 
-
+declare var window: any;
 @Component({
   templateUrl: 'app.html'
 })
@@ -89,10 +89,11 @@ export class MyApp {
   logout() {
     this.api.stopEcho();
     this.api.username = ""
-    this.api.url = ""
     this.api.user = null;
     this.api.password = ""
     this.api.residence = null;
+    if (!window.url)
+      this.api.url = ""
     this.api.onesignal.setSubscription(false);
     this.api.clearSharedPreferences();
     this.api.storage.clear().then(() => {

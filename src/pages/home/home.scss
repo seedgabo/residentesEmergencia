@@ -1,4 +1,26 @@
+page-home {
+  ion-content {
+    background-image: url(https://d2v9y0dukr6mq2.cloudfront.net/video/thumbnail/RyXKwr9/4k-abstract-red-background-animation-loop_ekxbi-n5__F0000.png) !important;
+    background-size: cover;
+  }
+}
+
 .panic-button-giant {
-    height: 30%;
-    width: 99%;
+  height: 250px;
+  width: 250px;
+  border-radius: 100%;
+  background-color: #CCC;
+  color: #333;
+  font-size: 21px;
+  font-family: Lucida Console;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
+}
+
+.pulse {
+  box-shadow: 0 0 0 rgba(255, 255, 44, 0.4);
+  animation: pulse 2s infinite;
+}
+
+.pulse:hover {
+  animation: none;
 }

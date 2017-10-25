@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="com.seedgabo.residenciasPanic" version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
-    <name>Aseinteg Seguridad</name>
+<widget id="com.seedgabo.residenciasPanic" version="1.1.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+    <name>Aseinteg Seguridad Especial</name>
     <description />
     <author email="seedgabo@gmail.com" href="http://residenciasonline.com/">Newton Developers</author>
     <content src="index.html" />
@@ -137,4 +137,7 @@
     </plugin>
     <plugin name="ionic-plugin-keyboard" spec="^2.2.1" />
     <plugin name="onesignal-cordova-plugin" spec="^2.1.2" />
+    <plugin name="cordova-plugin-geolocation" spec="^2.4.3">
+        <variable name="GEOLOCATION_USAGE_DESCRIPTION" value="To locate you in a situation of panic" />
+    </plugin>
 </widget>

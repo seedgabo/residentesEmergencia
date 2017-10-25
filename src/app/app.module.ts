@@ -26,6 +26,7 @@ import { File } from '@ionic-native/file';
 import { FileOpener } from "@ionic-native/file-opener";
 import { Transfer } from "@ionic-native/transfer";
 import { Deeplinks } from "@ionic-native/deeplinks";
+import { Geolocation } from '@ionic-native/geolocation';
 
 
 import { AutoCompleteModule } from 'ionic2-auto-complete';
@@ -65,7 +66,7 @@ import { ProfilePage } from "../pages/profile/profile";
   ],
   providers: [
     StatusBar, SplashScreen, Camera, Facebook, GooglePlus, AppMinimize, BackgroundMode, CodePush, OneSignal, Device,
-    Deeplinks, Transfer, File, FileOpener, Vibration,
+    Deeplinks, Transfer, File, FileOpener, Vibration, Geolocation,
     { provide: ErrorHandler, useClass: IonicErrorHandler },
     Api,
   ]

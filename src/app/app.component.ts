@@ -64,7 +64,7 @@ export class MyApp {
       );
       this.backgroundmode.excludeFromTaskList();
       // this.backgroundmode.overrideBackButton();
-      this.codepush.sync({ updateDialog: false, ignoreFailedUpdates: false, }).subscribe((syncStatus) => console.log(syncStatus), (err) => { console.warn(err) });
+      // this.codepush.sync({ updateDialog: false, ignoreFailedUpdates: false, }).subscribe((syncStatus) => console.log(syncStatus), (err) => { console.warn(err) });
     });
   }
 

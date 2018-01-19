@@ -29,10 +29,6 @@ import { Deeplinks } from "@ionic-native/deeplinks";
 import { Geolocation } from '@ionic-native/geolocation';
 
 
-import { AutoCompleteModule } from 'ionic2-auto-complete';
-import { DatePickerModule } from 'datepicker-ionic2';
-import { RoundProgressModule } from 'angular-svg-round-progressbar';
-
 import { MyApp } from './app.component';
 import { HomePage } from '../pages/home/home';
 import { Login } from "../pages/login/login";
@@ -50,10 +46,7 @@ import { ProfilePage } from "../pages/profile/profile";
   imports: [
     BrowserModule,
     HttpModule,
-    AutoCompleteModule,
     MomentModule,
-    DatePickerModule,
-    RoundProgressModule,
     IonicModule.forRoot(MyApp),
     IonicStorageModule.forRoot(),
   ],

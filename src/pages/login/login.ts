@@ -3,8 +3,8 @@ import { Component } from '@angular/core';
 import { NavController, NavParams, AlertController, LoadingController, Events } from 'ionic-angular';
 
 import { Api } from "../../providers/api";
-import { Facebook } from '@ionic-native/facebook';
-import { GooglePlus } from '@ionic-native/google-plus';
+// import { Facebook } from '@ionic-native/facebook';
+// import { GooglePlus } from '@ionic-native/google-plus';
 
 // import { IonicPage } from "ionic-angular";
 declare var window: any;

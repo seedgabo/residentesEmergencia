@@ -15,20 +15,21 @@ export class TransPipe implements PipeTransform {
 
   }
   transform(value: string, ...args) {
+    var base,trans;
     if (!this.api.langs) return value;
     var splits = value.split('.');
     if (splits.length == 2) {
-      var base = this.api.langs[splits[0]];
+      base = this.api.langs[splits[0]];
       if (base) {
-        var trans = base[splits[1]];
+        trans = base[splits[1]];
         if (trans) {
           value = trans;
         }
       }
     } else {
-      var base = this.api.langs["__"];
+      base = this.api.langs["__"];
       if (base) {
-        var trans = base[value];
+        trans = base[value];
         if (trans) {
           value = trans;
         }

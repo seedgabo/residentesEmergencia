@@ -89,34 +89,29 @@
     <platform name="ios">
         <preference name="CodePushDeploymentKey" value="DJ87go4Fm4TRoEjQHpEPErcsR9F1c0e4a0a6-2be5-4604-bcc1-c0b2c1387dd2" />
     </platform>
-    <engine name="android" spec="^6.2.3" />
     <engine name="ios" spec="^4.4.0" />
-    <plugin name="cordova-plugin-appminimize" spec="git+https://github.com/tomloprod/cordova-plugin-appminimize.git" />
-    <plugin name="cordova-plugin-background-mode" spec="^0.7.2" />
-    <plugin name="cordova-plugin-camera" spec="^2.4.1">
-        <variable name="CAMERA_USAGE_DESCRIPTION" value="Residentes quiere usar tu camara para subir fotos de tus activos" />
-        <variable name="PHOTOLIBRARY_USAGE_DESCRIPTION" value="Residentes quiere acceder a tus fotos para compartir fotos de tus activos" />
-    </plugin>
-    <plugin name="cordova-plugin-code-push" spec="^1.9.4-beta" />
     <plugin name="cordova-plugin-console" spec="^1.0.7" />
     <plugin name="cordova-plugin-device" spec="^1.1.6" />
+    <plugin name="cordova-plugin-splashscreen" spec="^4.0.3" />
+    <plugin name="cordova-plugin-statusbar" spec="^2.2.3" />
+    <plugin name="cordova-plugin-whitelist" spec="^1.3.2" />
+    <plugin name="ionic-plugin-keyboard" spec="^2.2.1" />
+    <plugin name="cordova-plugin-code-push" spec="^1.9.4-beta" />
     <plugin name="cordova-plugin-facebook4" spec="^1.9.1">
         <variable name="APP_ID" value="796212907168839" />
         <variable name="APP_NAME" value="Residencias Online" />
     </plugin>
-    <plugin name="cordova-plugin-file" spec="^4.3.3" />
-    <plugin name="cordova-plugin-file-opener2" spec="^2.0.19" />
-    <plugin name="cordova-plugin-file-transfer" spec="^1.6.3" />
     <plugin name="cordova-plugin-googleplus" spec="^5.1.1">
         <variable name="REVERSED_CLIENT_ID" value="600000041642-d423nns9o78c2g8qcvrpj57kkshhjkid.apps.googleusercontent.com" />
     </plugin>
-    <plugin name="cordova-plugin-shared-preferences" spec="0.0.1" />
-    <plugin name="cordova-plugin-splashscreen" spec="^4.0.3" />
-    <plugin name="cordova-plugin-statusbar" spec="^2.2.3" />
+    <plugin name="cordova-plugin-background-mode" spec="^0.7.2" />
+    <plugin name="cordova-plugin-appminimize" spec="git+https://github.com/tomloprod/cordova-plugin-appminimize.git" />
+    <plugin name="cordova-plugin-file-transfer" spec="^1.6.3" />
     <plugin name="cordova-plugin-vibration" spec="^2.1.5" />
-    <plugin name="cordova-plugin-whitelist" spec="^1.3.2" />
     <plugin name="cordova-plugin-x-socialsharing" spec="^5.2.0" />
+    <plugin name="onesignal-cordova-plugin" spec="^2.1.2" />
     <plugin name="de.appplant.cordova.plugin.local-notification" spec="^0.8.5" />
+    <plugin name="cordova-plugin-file-opener2" spec="^2.0.19" />
     <plugin name="ionic-plugin-deeplinks" spec="^1.0.15">
         <variable name="URL_SCHEME" value="residenciasOnline" />
         <variable name="DEEPLINK_SCHEME" value="https" />
@@ -135,9 +130,14 @@
         <variable name="DEEPLINK_5_SCHEME" value=" " />
         <variable name="DEEPLINK_5_HOST" value=" " />
     </plugin>
-    <plugin name="ionic-plugin-keyboard" spec="^2.2.1" />
-    <plugin name="onesignal-cordova-plugin" spec="^2.1.2" />
+    <plugin name="cordova-plugin-file" spec="^4.3.3" />
+    <plugin name="cordova-plugin-camera" spec="^2.4.1">
+        <variable name="CAMERA_USAGE_DESCRIPTION" value="Residentes quiere usar tu camara para subir fotos de tus activos" />
+        <variable name="PHOTOLIBRARY_USAGE_DESCRIPTION" value="Residentes quiere acceder a tus fotos para compartir fotos de tus activos" />
+    </plugin>
+    <plugin name="cordova-plugin-shared-preferences" spec="0.0.1" />
     <plugin name="cordova-plugin-geolocation" spec="^2.4.3">
         <variable name="GEOLOCATION_USAGE_DESCRIPTION" value="To locate you and send the panic" />
     </plugin>
+    <engine name="android" spec="~6.3.0" />
 </widget>

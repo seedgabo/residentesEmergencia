@@ -89,7 +89,6 @@
     <platform name="ios">
         <preference name="CodePushDeploymentKey" value="DJ87go4Fm4TRoEjQHpEPErcsR9F1c0e4a0a6-2be5-4604-bcc1-c0b2c1387dd2" />
     </platform>
-    <engine name="ios" spec="^4.4.0" />
     <plugin name="cordova-plugin-console" spec="^1.0.7" />
     <plugin name="cordova-plugin-device" spec="^1.1.6" />
     <plugin name="cordova-plugin-splashscreen" spec="^4.0.3" />
@@ -132,7 +131,6 @@
     </plugin>
     <plugin name="cordova-plugin-file" spec="^4.3.3" />
     <plugin name="cordova-plugin-shared-preferences" spec="0.0.1" />
-    <engine name="android" spec="~6.3.0" />
     <plugin name="cordova-plugin-camera" spec="^4.0.1">
         <variable name="CAMERA_USAGE_DESCRIPTION" value="Residentes quiere usar tu camara para subir fotos de tus activos" />
         <variable name="PHOTOLIBRARY_USAGE_DESCRIPTION" value="Residentes quiere acceder a tus fotos para compartir fotos de tus activos" />
@@ -140,4 +138,6 @@
     <plugin name="cordova-plugin-geolocation" spec="^4.0.1">
         <variable name="GEOLOCATION_USAGE_DESCRIPTION" value="To locate you and send the panic" />
     </plugin>
+    <engine name="ios" spec="^4.4.0" />
+    <engine name="android" spec="~6.3.0" />
 </widget>

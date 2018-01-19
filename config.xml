@@ -1,12 +1,11 @@
 <?xml version='1.0' encoding='utf-8'?>
 <widget id="com.seedgabo.residenciasPanic" version="1.1.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
-    <name>Aseinteg Seguridad Especial</name>
+    <name>Residentes Online S.O.S.</name>
     <description />
     <author email="seedgabo@gmail.com" href="http://residenciasonline.com/">Newton Developers</author>
     <content src="index.html" />
     <access origin="*" />
     <allow-navigation href="http://ionic.local/*" />
-    <allow-navigation href="http://192.168.80.20:8100" />
     <allow-intent href="http://*/*" />
     <allow-intent href="https://*/*" />
     <allow-intent href="tel:*" />
@@ -112,7 +111,7 @@
     <plugin name="de.appplant.cordova.plugin.local-notification" spec="^0.8.5" />
     <plugin name="cordova-plugin-file-opener2" spec="^2.0.19" />
     <plugin name="ionic-plugin-deeplinks" spec="^1.0.15">
-        <variable name="URL_SCHEME" value="residenciasOnline" />
+        <variable name="URL_SCHEME" value="residenciasOnlineEmergency" />
         <variable name="DEEPLINK_SCHEME" value="https" />
         <variable name="DEEPLINK_HOST" value="residenciasonline.com" />
         <variable name="ANDROID_PATH_PREFIX" value="/" />
@@ -140,4 +139,5 @@
     </plugin>
     <engine name="ios" spec="^4.4.0" />
     <engine name="android" spec="~6.3.0" />
+    <engine name="browser" spec="5.0.3" />
 </widget>

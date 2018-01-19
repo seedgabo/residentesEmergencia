@@ -1,8 +1,8 @@
 {
-  "name": "residencias2",
-  "version": "0.0.1",
-  "author": "Ionic Framework",
-  "homepage": "http://ionicframework.com/",
+  "name": "residentes-online-emergency",
+  "version": "1.0.1",
+  "author": "Gabriel Bejarano",
+  "homepage": "http://residentesonline.com/",
   "private": true,
   "scripts": {
     "clean": "ionic-app-scripts clean",
@@ -44,6 +44,9 @@
     "angular-svg-round-progressbar": "1.2.0",
     "autoprefixer": "^7.2.4",
     "code-push": "^1.9.0-beta",
+    "cordova-android": "~6.3.0",
+    "cordova-browser": "5.0.3",
+    "cordova-ios": "^4.4.0",
     "cordova-plugin-appminimize": "git+https://github.com/tomloprod/cordova-plugin-appminimize.git",
     "cordova-plugin-background-mode": "^0.7.2",
     "cordova-plugin-camera": "^2.4.1",
@@ -79,8 +82,7 @@
     "rxjs": "5.5.2",
     "sw-toolbox": "3.6.0",
     "zone.js": "0.8.18",
-    "cordova-ios": "^4.4.0",
-    "cordova-android": "~6.3.0"
+    "cordova-plugin-facebook4": "^1.9.1"
   },
   "devDependencies": {
     "@ionic/app-scripts": "3.1.6",
@@ -132,12 +134,18 @@
       "cordova-plugin-file": {},
       "cordova-plugin-shared-preferences": {},
       "cordova-plugin-zip": {},
-      "cordova-plugin-geolocation": {},
-      "cordova-plugin-camera": {}
+      "cordova-plugin-geolocation": {
+        "GEOLOCATION_USAGE_DESCRIPTION": "To locate you and send the panic"
+      },
+      "cordova-plugin-camera": {
+        "CAMERA_USAGE_DESCRIPTION": "Residentes quiere usar tu camara para subir fotos de tus activos",
+        "PHOTOLIBRARY_USAGE_DESCRIPTION": "Residentes quiere acceder a tus fotos para compartir fotos de tus activos"
+      }
     },
     "platforms": [
       "ios",
-      "android"
+      "android",
+      "browser"
     ]
   }
 }

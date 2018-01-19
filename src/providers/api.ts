@@ -2,7 +2,7 @@ import { Injectable, NgZone } from '@angular/core';
 import { Http, Headers } from '@angular/http';
 import 'rxjs/add/operator/map';
 
-import { PopoverController, ToastController, Events, Platform } from "ionic-angular";
+import { PopoverController, ToastController, Events, Platform, AlertController } from "ionic-angular";
 import { Storage } from '@ionic/storage';
 
 
@@ -14,6 +14,8 @@ import Echo from 'laravel-echo';
 import Pusher from 'pusher-js';
 import moment from 'moment';
 import { Vibration } from '@ionic-native/vibration';
+import { Geolocation } from '@ionic-native/geolocation';
+
 declare var window: any;
 moment.locale('es');
 window.Pusher = Pusher;
@@ -46,7 +48,7 @@ export class Api {
   pets = [];
   chats = [];
   _events = [];
-  constructor(public http: Http, public storage: Storage, public zone: NgZone, public popover: PopoverController, public toast: ToastController, public events: Events, public background: BackgroundMode, public onesignal: OneSignal, public device: Device, public platform: Platform, public vibration: Vibration) {
+  constructor(public http: Http, public storage: Storage, public zone: NgZone, public popover: PopoverController, public toast: ToastController, public events: Events, public background: BackgroundMode, public onesignal: OneSignal, public device: Device, public platform: Platform, public vibration: Vibration, public alert: AlertController, public geolocation: Geolocation) {
     storage.ready().then(() => {
       storage.get('username').then(username => { this.username = username });
       storage.get('password').then(password => { this.password = password });
@@ -712,6 +714,9 @@ export class Api {
           duration: 5000,
           position: 'top',
         }).present();
+
+        this.getLocationForPanic(data);
+
         this.vibration.vibrate(300)
         setTimeout(() => {
           this.vibration.vibrate(300)
@@ -728,6 +733,57 @@ export class Api {
       })
     return promise;
   }
+
+  Error(error) {
+    var message = "";
+    if (error.error == 500 || error.errorStatus == 500) {
+      message = this.trans("__.Internal Server Error")
+    }
+    if (error.error == 404 || error.errorStatus == 404) {
+      message = this.trans("__.Not Found")
+    }
+    if (error.error == 401 || error.errorStatus == 401) {
+      message = this.trans("__.Unathorized")
+    }
+    this.alert.create({
+      title: this.trans("__.Network Error"),
+      subTitle: error.error,
+      message: message,
+      buttons: ["OK"],
+
+    }).present();
+  }
+
+  getLocationForPanic(data) {
+    this.geolocation.getCurrentPosition({
+      enableHighAccuracy: true,
+
+    })
+      .then((resp) => {
+        var locs = {
+          accuracy: resp.coords.accuracy,
+          altitude: resp.coords.altitude,
+          latitude: resp.coords.latitude,
+          longitude: resp.coords.longitude,
+          speed: resp.coords.speed,
+          heading: resp.coords.heading,
+          altitudeAccuracy: resp.coords.altitudeAccuracy,
+          timestamp: resp.timestamp,
+        }
+        this.put("panics/" + data.id, { location: locs })
+          .then((dataL) => {
+            console.log("panic with locs", dataL)
+          })
+          .catch((err) => {
+            console.error("error sending panic with location", err);
+          })
+
+      }).catch((error) => {
+        console.log('Error getting location', error);
+      });
+  }
+
+
 
   saveSharedPreferences() {
     try {

@@ -1,7 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpModule } from '@angular/http';
 import { IonicStorageModule } from '@ionic/storage';
-import { MomentModule } from 'angular2-moment';
 
 import { ErrorHandler, NgModule } from '@angular/core';
 import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
@@ -15,8 +14,6 @@ import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { Camera } from '@ionic-native/camera';
 import { Vibration } from '@ionic-native/vibration';
-import { Facebook } from "@ionic-native/facebook";
-import { GooglePlus } from '@ionic-native/google-plus';
 import { BackgroundMode } from "@ionic-native/background-mode";
 import { AppMinimize } from "@ionic-native/app-minimize";
 import { CodePush } from '@ionic-native/code-push';
@@ -46,7 +43,6 @@ import { ProfilePage } from "../pages/profile/profile";
   imports: [
     BrowserModule,
     HttpModule,
-    MomentModule,
     IonicModule.forRoot(MyApp),
     IonicStorageModule.forRoot(),
   ],
@@ -58,7 +54,7 @@ import { ProfilePage } from "../pages/profile/profile";
     ProfilePage
   ],
   providers: [
-    StatusBar, SplashScreen, Camera, Facebook, GooglePlus, AppMinimize, BackgroundMode, CodePush, OneSignal, Device,
+    StatusBar, SplashScreen, Camera, AppMinimize, BackgroundMode, CodePush, OneSignal, Device,
     Deeplinks, Transfer, File, FileOpener, Vibration, Geolocation,
     { provide: ErrorHandler, useClass: IonicErrorHandler },
     Api,

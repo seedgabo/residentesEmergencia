@@ -89,7 +89,6 @@
           <ion-item text-center>
             <b>{{ residence.total/(residence.total-residence.debt)*100 }}%</b>
             <br>
-            <round-progress style="margin: 0 auto;" [radius]="60" [current]="residence.total - residence.debt" [max]="residence.total"></round-progress>
           </ion-item>
           <ion-item *ngIf="residence.owner">
             <b>{{ 'literals.owner' | trans }}</b>

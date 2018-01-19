@@ -1,3 +1,4 @@
+import { HomePage } from './../home/home';
 import { Component } from '@angular/core';
 import { NavController, NavParams, AlertController, LoadingController, Events } from 'ionic-angular';
 
@@ -5,9 +6,9 @@ import { Api } from "../../providers/api";
 import { Facebook } from '@ionic-native/facebook';
 import { GooglePlus } from '@ionic-native/google-plus';
 
-import { IonicPage } from "ionic-angular";
+// import { IonicPage } from "ionic-angular";
 declare var window: any;
-@IonicPage()
+// @IonicPage()
 @Component({
   selector: 'page-login',
   templateUrl: 'login.html',
@@ -195,7 +196,7 @@ export class Login {
 
   goTo() {
     this.events.publish('login', {});
-    this.navCtrl.setRoot('HomePage');
+    this.navCtrl.setRoot(HomePage);
   }
 
 }

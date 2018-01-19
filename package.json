@@ -32,7 +32,7 @@
     "@ionic-native/facebook": "^3.10.3",
     "@ionic-native/file": "^3.13.0",
     "@ionic-native/file-opener": "^3.13.0",
-    "@ionic-native/geolocation": "^4.3.2",
+    "@ionic-native/geolocation": "^4.5.2",
     "@ionic-native/google-plus": "^3.10.3",
     "@ionic-native/local-notifications": "^3.10.3",
     "@ionic-native/onesignal": "^3.12.1",
@@ -142,7 +142,7 @@
       },
       "cordova-plugin-shared-preferences": {},
       "cordova-plugin-geolocation": {
-        "GEOLOCATION_USAGE_DESCRIPTION": "To locate you in a situation of panic"
+        "GEOLOCATION_USAGE_DESCRIPTION": "To locate you and send the panic"
       }
     },
     "platforms": [

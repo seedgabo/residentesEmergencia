@@ -1,10 +1,13 @@
 import { Component } from '@angular/core';
 import { NavController, NavParams, AlertController, LoadingController, Events } from 'ionic-angular';
-import { HomePage } from "../home/home";
+
 import { Api } from "../../providers/api";
 import { Facebook } from '@ionic-native/facebook';
 import { GooglePlus } from '@ionic-native/google-plus';
+
+import { IonicPage } from "ionic-angular";
 declare var window: any;
+@IonicPage()
 @Component({
   selector: 'page-login',
   templateUrl: 'login.html',
@@ -12,14 +15,14 @@ declare var window: any;
 export class Login {
   forgot = false;
   ready = false;
-  servers = {};
+  servers = { "0000": { "url": "http:\/\/residenciasonline.com\/residencias\/public\/", "name": "El Pe\u00f1on", "url_newton": "http:\/\/residenciasonline.com\/newton\/public" }, "1905": { "url": "http:\/\/residenciasonline.com\/aseinteg\/public\/", "name": "Aseinteg Especial", "url_newton": "http:\/\/residenciasonline.com\/newton\/public" }, "0001": { "url": "http:\/\/residenciasonline.com\/aseinteg\/public\/" }, "7000": { "url": "http:\/\/residenciasonline.com\/penon\/public\/", "name": "El Pe\u00f1on", "url_newton": "" }, "3720": { "url": "http:\/\/residenciasonline.com\/chestnut\/public\/", "name": "Prado Chestnut Hill", "url_newton": "" } };
   code = "";
-  predefined = false;
+  preconfigured = false;
   constructor(public facebook: Facebook, public google: GooglePlus, public navCtrl: NavController, public navParams: NavParams, public api: Api, public alertCtrl: AlertController, public loadingCtrl: LoadingController, public events: Events) {
-    this.api.ready.then(() => {
-      if (window.url)
-        this.predefined = true;
-    });
+    if (window.url) {
+      this.preconfigured = true;
+      this.api.storage.set('url', window.url);
+    }
   }
 
   ionViewDidLoad() {
@@ -33,6 +36,7 @@ export class Login {
       this.api.storage.set('url', server.url);
     }
   }
+
   goBack() {
     this.api.url = null;
     this.api.storage.remove('url');
@@ -61,13 +65,23 @@ export class Login {
 
       .catch((err) => {
         console.error(err);
-        let alert = this.alertCtrl.create({
-          title: "Error",
-          subTitle: 'Usuario y Contraseña Invalidos',
-          buttons: ['OK']
-        });
-        loading.dismiss();
-        alert.present();
+        if (err.status === 401) {
+          let alert = this.alertCtrl.create({
+            title: "Error",
+            subTitle: 'Usuario y Contraseña Invalidos',
+            buttons: ['OK']
+          });
+          loading.dismiss();
+          alert.present();
+        } else {
+          let alert = this.alertCtrl.create({
+            title: "Error",
+            subTitle: 'no se pudo hacer login: ' + err.error,
+            buttons: ['OK']
+          });
+          loading.dismiss();
+          alert.present();
+        }
 
       });
   }
@@ -169,16 +183,19 @@ export class Login {
   getServers() {
     this.api.http.get('http://residenciasonline.com/residencias/public/servers.json')
       .map(res => res.json())
-      .subscribe(data => {
+      .subscribe((data: any) => {
         this.servers = data
         this.ready = true
         console.log(this.servers);
-      }, (err) => { console.error(err) });
+      }, (err) => {
+        console.error(err)
+        this.api.Error(err);
+      });
   }
 
   goTo() {
     this.events.publish('login', {});
-    this.navCtrl.setRoot(HomePage);
+    this.navCtrl.setRoot('HomePage');
   }
 
 }

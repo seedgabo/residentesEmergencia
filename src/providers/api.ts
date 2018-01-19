@@ -1,21 +1,17 @@
 import { Injectable, NgZone } from '@angular/core';
 import { Http, Headers } from '@angular/http';
 import 'rxjs/add/operator/map';
-
 import { PopoverController, ToastController, Events, Platform, AlertController } from "ionic-angular";
 import { Storage } from '@ionic/storage';
-
-
-
 import { BackgroundMode } from "@ionic-native/background-mode";
 import { OneSignal } from "@ionic-native/onesignal";
 import { Device } from "@ionic-native/device";
+import { Geolocation } from '@ionic-native/geolocation';
+
 import Echo from 'laravel-echo';
 import Pusher from 'pusher-js';
 import moment from 'moment';
 import { Vibration } from '@ionic-native/vibration';
-import { Geolocation } from '@ionic-native/geolocation';
-
 declare var window: any;
 moment.locale('es');
 window.Pusher = Pusher;
@@ -48,7 +44,7 @@ export class Api {
   pets = [];
   chats = [];
   _events = [];
-  constructor(public http: Http, public storage: Storage, public zone: NgZone, public popover: PopoverController, public toast: ToastController, public events: Events, public background: BackgroundMode, public onesignal: OneSignal, public device: Device, public platform: Platform, public vibration: Vibration, public alert: AlertController, public geolocation: Geolocation) {
+  constructor(public http: Http, public storage: Storage, public zone: NgZone, public popover: PopoverController, public toast: ToastController, public events: Events, public background: BackgroundMode, public onesignal: OneSignal, public device: Device, public platform: Platform, public vibration: Vibration, public geolocation: Geolocation, public alert: AlertController) {
     storage.ready().then(() => {
       storage.get('username').then(username => { this.username = username });
       storage.get('password').then(password => { this.password = password });
@@ -56,9 +52,10 @@ export class Api {
       storage.get('settings').then(settings => { this.settings = settings });
       storage.get('langs').then(langs => { this.langs = langs; console.log(langs) });
       storage.get('residence').then(residence => { this.residence = residence; });
-      storage.get('url').then(url => {
-        this.url = url
-        if (!url && window.url)
+      storage.get('url').then(url_data => {
+        if (url_data)
+          this.url = url_data;
+        else if (window.url)
           this.url = window.url;
         storage.get('user').then(user => {
           this.user = user
@@ -88,7 +85,7 @@ export class Api {
     return new Promise((resolve, reject) => {
       this.http.get(this.url + "api/login", { headers: this.setHeaders() })
         .map(res => res.json())
-        .subscribe(data => {
+        .subscribe((data: any) => {
           this.user = data.user;
           this.residence = data.residence;
           this.settings = data.settings;
@@ -114,7 +111,7 @@ export class Api {
           this.saveSharedPreferences();
           resolve(data);
         }, error => {
-          return reject(this.handleData(error));
+          return reject(error);
         });
     });
   }
@@ -132,6 +129,7 @@ export class Api {
   }
 
   getAllData() {
+
     var promise = this.get('getData');
     promise.then((data: any) => {
       console.log(data);
@@ -147,12 +145,17 @@ export class Api {
       this.parkings = data.parkings;
       this.invoices = data.invoices;
       this.residences = data.residences;
+
+      this.modules = data.modules;
+      this.settings = data.settings;
+
+      this.saveData(data);
       this.storage.set('allData', data);
       this.saveSharedPreferences();
+      this.pushRegister(this.user.onesignal_appId);
     }).catch((err) => {
       console.error(err);
     });
-    this.pushRegister(this.user.onesignal_appId);
     return promise;
   }
 
@@ -163,7 +166,7 @@ export class Api {
         .subscribe(data => {
           resolve(data);
         }, error => {
-          return reject(this.handleData(error));
+          return reject(error);
         });
     });
   }
@@ -175,7 +178,7 @@ export class Api {
         .subscribe(data => {
           resolve(data);
         }, error => {
-          return reject(this.handleData(error));
+          return reject(error);
         });
     });
   }
@@ -187,7 +190,7 @@ export class Api {
         .subscribe(data => {
           resolve(data);
         }, error => {
-          return reject(this.handleData(error));
+          return reject(error);
         });
     });
   }
@@ -199,7 +202,7 @@ export class Api {
         .subscribe(data => {
           resolve(data);
         }, error => {
-          return reject(this.handleData(error));
+          return reject(error);
         });
     });
   }
@@ -222,7 +225,7 @@ export class Api {
         .subscribe(data => {
           resolve(data);
         }, error => {
-          return reject(this.handleData(error));
+          return reject(error);
         });
     });
   }
@@ -243,13 +246,13 @@ export class Api {
         // encrypted: false,
         // cluster: 'eu',
         auth:
-        {
-          headers:
           {
-            'Auth-Token': this.user.token,
-            'Authorization': "Basic " + btoa(this.username + ":" + this.password)
+            headers:
+              {
+                'Auth-Token': this.user.token,
+                'Authorization': "Basic " + btoa(this.username + ":" + this.password)
+              }
           }
-        }
 
       });
       this.Echo.private('Application')
@@ -307,10 +310,11 @@ export class Api {
             return visitor.id === data.visitor.id;
           });
           this.zone.run(() => {
+            var visitor;
             if (visitor_index > -1)
-              var visitor = this.visitors[visitor_index] = data.visitor;
+              visitor = this.visitors[visitor_index] = data.visitor;
             else {
-              var visitor = this.visitors[this.visitors.length] = data.visitor;
+              visitor = this.visitors[this.visitors.length] = data.visitor;
             }
             if (data.image) {
               visitor.image = data.image;
@@ -331,14 +335,17 @@ export class Api {
 
 
         .listen('VisitCreated', (data) => {
-          if (data.visitor.residence_id != this.residence.id) return;
+          if (data.visit.residence_id != this.residence.id) return;
           console.log("created vist:", data);
 
           this.zone.run(() => {
-            this.visits.unshift(data.visit);
+            if (this.visits)
+              this.visits.unshift(data.visit);
             var visit = this.visits[0];
             visit.visitor = data.visitor;
+            visit.guest = data.guest;
             visit.visitors = data.visitors;
+            visit.creator = data.creator;
             this.visitStatus(visit);
           })
         })
@@ -346,6 +353,7 @@ export class Api {
           console.log("updated visit:", data);
           if (data.visit.residence_id !== this.residence.id) return;
           data.visit.visitor = data.visitor;
+          data.visit.guest = data.guest;
           data.visit.visitors = data.visitors;
           this.events.publish('VisitUpdated', data);
 
@@ -353,15 +361,16 @@ export class Api {
             return visit.id === data.visit.id;
           });
           this.zone.run(() => {
+            var visit;
             if (visit_index > -1) {
-              var visit = this.visits[visit_index] = data.visit;
+              visit = this.visits[visit_index] = data.visit;
               if (this.visits[visit_index].status !== data.visit.status) {
                 this.visitStatus(visit);
               }
             }
             else {
               this.visits.unshift(data.visit);
-              var visit = this.visits[0];
+              visit = this.visits[0];
               this.visitStatus(visit);
             }
 
@@ -369,7 +378,7 @@ export class Api {
         })
         .listen('VisitDeleted', (data) => {
           console.log("deleted visitor:", data);
-          if (data.visitor.residence_id != this.residence.id) return;
+          if (data.visit.residence_id != this.residence.id) return;
 
           var visit = this.visits.findIndex((visit) => {
             return visit.id === data.visit.id;
@@ -397,10 +406,11 @@ export class Api {
             return pet.id === data.pet.id;
           });
           this.zone.run(() => {
+            var pet;
             if (pet_index > -1)
-              var pet = this.pets[pet_index] = data.pet;
+              pet = this.pets[pet_index] = data.pet;
             else {
-              var pet = this.pets[this.pets.length] = data.pet;
+              pet = this.pets[this.pets.length] = data.pet;
             }
             if (data.image) {
               pet.image = data.image;
@@ -435,10 +445,11 @@ export class Api {
             return worker.id === data.worker.id;
           });
           this.zone.run(() => {
+            var worker;
             if (worker_index > -1)
-              var worker = this.workers[worker_index] = data.worker;
+              worker = this.workers[worker_index] = data.worker;
             else {
-              var worker = this.workers[this.workers.length] = data.worker;
+              worker = this.workers[this.workers.length] = data.worker;
             }
             if (data.image) {
               worker.image = data.image;
@@ -482,7 +493,7 @@ export class Api {
         .listen('EventDeleted', (data) => {
           console.log("deleted event:", data);
 
-          var event = this.visits.findIndex((visit) => {
+          var event = this.visits.findIndex((event) => {
             return event.id === data.event.id;
           });
           this.zone.run(() => {
@@ -512,12 +523,14 @@ export class Api {
       this.Echo.private('App.Residence.' + this.user.residence_id)
         .listen('VisitConfirm', (data) => {
           console.log("VisitConfirm: ", data);
-          data.visit.visitor = data.visit.visitor;
-          data.visit.visitors = data.visit.visitors;
+          data.visit.visitor = data.visitor;
+          data.visit.guest = data.guest;
+          data.visit.visitors = data.visitors;
+          data.visit.creator = data.creator;
           this.background.unlock();
           this.background.wakeUp();
           this.background.moveToForeground();
-          // this.newVisit(data.visit);
+          this.newVisit(data.visit);
         })
 
       this.Echo.private('App.User.' + this.user.id)
@@ -550,7 +563,6 @@ export class Api {
       // console.log(this.Echo);
     })
   }
-
   stopEcho() {
     this.Echo.leave('Application');
     this.Echo.leave('App.User.' + this.user.id);
@@ -562,19 +574,18 @@ export class Api {
   pushRegister(appid = "ebf07feb-3c76-4639-8c87-b1e7a2e9ddd8") {
     this.onesignal.startInit(appid, "425679220353");
     this.onesignal.inFocusDisplaying(this.onesignal.OSInFocusDisplayOption.Notification);
-    this.onesignal.syncHashedEmail(this.user.email);
-    this.onesignal.sendTag("user_id", this.user.id);
-    this.onesignal.sendTag("residence_id", this.user.residence_id);
+    this.onesignal.sendTags({
+      user_id: this.user.id,
+      residence_id: this.user.residence_id,
+      app_name: this.user.onesignal_app_name
+    });
+
     this.onesignal.handleNotificationReceived().subscribe((not) => {
       console.log("push notification received", not);
     }, console.warn);
-
     this.onesignal.handleNotificationOpened().subscribe((not) => {
       console.log("push notification opened", not);
     }, console.warn);
-
-    this.onesignal.endInit();
-    this.onesignal.setSubscription(true);
     this.onesignal.getIds().then((ids: any) => {
       console.log("onesignal ids", ids)
       var data = {
@@ -590,24 +601,31 @@ export class Api {
         })
         .catch(console.error);
     }).catch(console.error);
+    this.onesignal.syncHashedEmail(this.user.email);
+    this.onesignal.endInit();
+  }
+
+  pushUnregister() {
+    this.onesignal.deleteTags(['user_id', 'residence_id', 'app_name']);
   }
 
 
   trans(value, args = null) {
     if (!this.langs) return value;
     var splits = value.split('.');
+    var base, trans;
     if (splits.length == 2) {
-      var base = this.langs[splits[0]];
+      base = this.langs[splits[0]];
       if (base) {
-        var trans = base[splits[1]];
+        trans = base[splits[1]];
         if (trans) {
           value = trans;
         }
       }
     } else {
-      var base = this.langs["__"];
+      base = this.langs["__"];
       if (base) {
-        var trans = base[value];
+        trans = base[value];
         if (trans) {
           value = trans;
         }
@@ -631,31 +649,25 @@ export class Api {
     return headers;
   }
 
-  private handleData(res) {
-    if (res.statusText == "Ok") {
-      return { status: "No Parace haber conexión con el servidor" };
-    }
 
-    // If request fails, throw an Error that will be caught
-    if (res.status < 200 || res.status >= 300) {
-      return { error: res.status }
-    }
-    // If everything went fine, return the response
-    else {
-      return res;
-    }
+  newVisit(visit) {
+    this.playSoundNotfication();
+    this.moveToFront();
+    this.popover.create('NewVisitPage', { visit: visit, api: this }, { cssClass: "fullScreen", enableBackdropDismiss: false, showBackdrop: true }).present();
   }
 
   visitStatus(visit) {
     if (visit.status == 'waiting for confirmation') { return }
-    this.toast.create({ message: this.trans("literals.visit") + " " + this.trans('literals.' + visit.status) + ": " + visit.visitor.name, duration: 12000, showCloseButton: true, closeButtonText: "X", position: "top", cssClass: visit.status }).present();
+    this.toast.create({
+      message: this.trans("literals.visit") + " " + this.trans('literals.' + visit.status) + ": " + (visit.visitor ? visit.visitor.name : visit.guest ? visit.guest.name : ''), duration: 12000, showCloseButton: true, closeButtonText: "X", position: "top", cssClass: visit.status
+    }).present();
     this.playSoundBeep();
   }
 
   newChatMessage(thread, message, sender) {
     if (this.user.id !== sender.id) {
       var sender = sender;
-      var msg = message.body;
+      var msg = message;
       this.toast.create({
         message: `${thread.title} - ${sender.name}: ${msg}`,
         closeButtonText: "X",
@@ -664,6 +676,7 @@ export class Api {
         position: "top"
       }).present();
     }
+
     this.chats.forEach((chat) => {
       if (thread.id == chat.id) {
         if (!chat.unread) chat.unread = 1;
@@ -736,54 +749,53 @@ export class Api {
 
   Error(error) {
     var message = "";
-    if (error.error == 500 || error.errorStatus == 500) {
+    if (error.status == 500) {
       message = this.trans("__.Internal Server Error")
     }
-    if (error.error == 404 || error.errorStatus == 404) {
+    if (error.status == 404) {
       message = this.trans("__.Not Found")
     }
-    if (error.error == 401 || error.errorStatus == 401) {
-      message = this.trans("__.Unathorized")
+    if (error.status == 401) {
+      message = this.trans("__.Unauthorized")
     }
     this.alert.create({
       title: this.trans("__.Network Error"),
       subTitle: error.error,
-      message: message,
+      message: message + ":" + error.statusText,
       buttons: ["OK"],
 
     }).present();
   }
 
   getLocationForPanic(data) {
-    this.geolocation.getCurrentPosition({
-      enableHighAccuracy: true,
+    var suc = (resp) => {
+      var locs = {
+        accuracy: resp.coords.accuracy,
+        altitude: resp.coords.altitude,
+        latitude: resp.coords.latitude,
+        longitude: resp.coords.longitude,
+        speed: resp.coords.speed,
+        heading: resp.coords.heading,
+        altitudeAccuracy: resp.coords.altitudeAccuracy,
+        timestamp: resp.timestamp,
+      }
+      this.put("panics/" + data.id, { location: locs })
+        .then((dataL) => {
+          console.log("panic with locs", dataL)
+        })
+        .catch((err) => {
+          console.error("error sending panic with location", err);
+        })
 
-    })
-      .then((resp) => {
-        var locs = {
-          accuracy: resp.coords.accuracy,
-          altitude: resp.coords.altitude,
-          latitude: resp.coords.latitude,
-          longitude: resp.coords.longitude,
-          speed: resp.coords.speed,
-          heading: resp.coords.heading,
-          altitudeAccuracy: resp.coords.altitudeAccuracy,
-          timestamp: resp.timestamp,
-        }
-        this.put("panics/" + data.id, { location: locs })
-          .then((dataL) => {
-            console.log("panic with locs", dataL)
-          })
-          .catch((err) => {
-            console.error("error sending panic with location", err);
-          })
+    }
+    var err = (error) => {
+      console.log('Error getting location', error);
+    }
+    this.geolocation.getCurrentPosition({ enableHighAccuracy: true })
+      .then(suc)
+      .catch(err)
 
-      }).catch((error) => {
-        console.log('Error getting location', error);
-      });
   }
-
-
 
   saveSharedPreferences() {
     try {

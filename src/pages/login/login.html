@@ -21,9 +21,9 @@
       </ion-item>
 
       <button style="margin-top:15px" full large ion-button color="secondary" icon-right (click)="login()">
-            Iniciar Sesion
-            <ion-icon name="log-in"></ion-icon>
-        </button>
+        Iniciar Sesion
+        <ion-icon name="log-in"></ion-icon>
+      </button>
 
 
       <!-- <button style="margin-top:15px" full ion-button icon-left (click)="loginWithFacebook()">
@@ -37,13 +37,13 @@
                 Iniciar sesion con Google
             </button> -->
 
-      <button full clear ion-button color="light" (click)="forgot=true">
-            Olvido su contraseña
-        </button>
+      <button full clear ion-button color="dark" (click)="forgot=true">
+        Olvido su contraseña
+      </button>
 
-      <button *ngIf="!predefined" full clear ion-button color="red" (click)="goBack()">
-            Volver
-        </button>
+      <button full clear ion-button color="danger" (click)="goBack()" *ngIf="!preconfigured">
+        Volver
+      </button>
     </div>
     <div *ngIf="forgot">
       <ion-item>
@@ -53,9 +53,9 @@
       <button style="margin-top:15px" full large ion-button color="secondary" (click)="recover(api.username)">
         Recuperar
       </button>
-      <button ion-button clear full color="light" (click)="forgot=false">
+      <button ion-button clear full color="dark" (click)="forgot=false">
         Volver al login
-    </button>
+      </button>
 
     </div>
 
